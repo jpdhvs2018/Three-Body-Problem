@@ -5,7 +5,7 @@ const double u = 0.012277471;
 const double T = 17.0652165601579625588917206249;
 
 //function declaration
-void initial_condition(std::vector<double> pos, std::vector<double> vel);
+void initial_condition(std::vector<double> & pos, std::vector<double> & vel);
 
 void print(const std::vector<double> & v);
 

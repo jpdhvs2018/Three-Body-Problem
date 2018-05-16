@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <vector>
 
-void initial_condition(std::vector<double> pos, std::vector<double> vel)
+void initial_condition(std::vector<double> & pos, std::vector<double> & vel)
 {
   //posiciones
   pos = {0.994, 0.0, 0.0};
@@ -66,14 +66,13 @@ void euler(std::vector<double> & pos, std::vector<double> & vel, const double ti
   std::vector<double> velaux(vel.size());
   double dt = T/(24000.0);
   int N = (int)((tend-tini)/dt);
-  double t = tini;
   for (int i = 0; i < N; ++i)
     {
-      t += dt*i;
+      double t = tini +  dt*i;
       std::copy(vel.begin(), vel.end(), velaux.begin());
       for (int j = 0; j < (vel.size()) ; ++j)
 	{
-	  vel[j] = vel[j] + dt*compute(pos, velaux, t, j); 
+	  vel[j] = vel[j] + dt*compute(pos, velaux, t, j+1); 
 	}
       
       for (int k = 0; k < (pos.size()) ; ++k)
@@ -81,10 +80,10 @@ void euler(std::vector<double> & pos, std::vector<double> & vel, const double ti
 	  pos[k] = pos[k] + dt*compute(pos, velaux, t, k+4);
 	}
       
-      std::cout << dt << " ";
-      //print(pos);
-      //print(vel);
-      //std::cout << "\n";
+      std::cout << t << " ";
+      print(pos);
+      print(vel);
+      std::cout << "\n";
     }
 }
 

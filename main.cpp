@@ -5,7 +5,7 @@
 int main()
 {
   const double ti=0.0;
-  const double te=1000.0;
+  const double te=20.0;
   std::vector<double> position;
   std::vector<double> velocity;
   initial_condition(position, velocity);
