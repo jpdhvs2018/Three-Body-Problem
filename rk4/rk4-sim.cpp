@@ -117,7 +117,7 @@ void rk4(std::vector<double> & pos, std::vector<double> & vel, const double tini
       pos[ii] = pos[ii] + (k1[ii] + 2*k2[ii] + 2*k3[ii] + k4[ii])/6.0;
     }
     
-    std::cout << t << " ";
+    std::cout << t  << " ";
     print(pos);
     print(vel);
     std::cout << "\n";
