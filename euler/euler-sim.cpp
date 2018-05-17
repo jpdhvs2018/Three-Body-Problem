@@ -70,7 +70,7 @@ void euler(std::vector<double> & pos, std::vector<double> & vel, const double ti
     {
       double t = tini +  dt*i;
       std::copy(vel.begin(), vel.end(), velaux.begin());
-      std::copy(pos.begin(), pos.end(), posaux.begin());
+      std::copy(pos.begin(), pos.end(), posaux.begin()); //extra
       for (int j = 0; j < (vel.size()) ; ++j)
 	{
 	  vel[j] = vel[j] + dt*compute(posaux, velaux, t, j+1); 
