@@ -36,13 +36,13 @@ double compute(const std::vector<double> & pos, const std::vector<double> & vel,
   double r = rvar(pos,vel);
   double s = svar(pos,vel);
   
-  if(id==1){ //returna funcion para calcular la velocidad en x
+  if(id==1){ //retorna funcion para calcular la velocidad en x
     return (pos[0] + 2*vel[1] - ((1-u)*(pos[0]+u)/(r*r*r)) - (u*(pos[0]-1+u)/(s*s*s)));
   }
-  if(id==2){ //returna funcion para calcular la velocidad en y
+  if(id==2){ //retorna funcion para calcular la velocidad en y
     return (pos[1] - 2*vel[0] - ((1-u)*pos[1]/(r*r*r)) - (u*pos[1]/(s*s*s)));
   }
-  if(id==3){ //returna funcion para calcular la velocidad en z
+  if(id==3){ //retorna funcion para calcular la velocidad en z
     return (((u-1)*pos[2]/(r*r*r)) - (u*pos[2]/(s*s*s)));
   }
   if(id==4){ //retorna la velocidad en x
