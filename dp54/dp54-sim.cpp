@@ -7,7 +7,9 @@
 
 void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tini, const double tend)
 {
-  std::vector<double> k1, k2, k3, k4, k5, k6, k7, velaux, posaux, vaux, paux;
+  std::vector<double> k1, k2, k3, k4, k5, k6, k7, vaux, paux;
+  double pzy = 0.0;
+  double vzy = 0.0;
   k1.resize(6);
   k2.resize(6);
   k3.resize(6);
@@ -17,20 +19,12 @@ void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tin
   k7.resize(6);
   vaux.resize(vel.size());
   paux.resize(vel.size());
-  velaux.resize(vel.size());
-  posaux.resize(pos.size());
-  const double eps=0.001;
-  double dt=0.001;
-  double dt2=0;
-  int nt=0;
+  double dt=T/6000.0;
   
   //calculo
-  for (int tt=0;tt<20000;tt++)
+  for (int tt=0;tt<13500;tt++)
     {
-      double t = tini + dt*nt;
-
-       std::copy(vel.begin(), vel.end(), velaux.begin());
-       std::copy(pos.begin(), pos.end(), posaux.begin());
+      double t = tini + dt*tt;
       
       // k1
       for(int ii = 0; ii < vel.size(); ++ii) {
@@ -39,8 +33,8 @@ void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tin
       }
       // k2 aux
       for(int ii = 0; ii < vel.size(); ++ii) {
-      vaux[ii] = vel[ii] + k1[ii+3]/5;
-      paux[ii] = pos[ii] + k1[ii]/5;
+	vaux[ii] = vel[ii] + k1[ii+3]/5;
+	paux[ii] = pos[ii] + k1[ii]/5;
       }
       //k2
       for(int ii = 0; ii < vel.size(); ++ii) {
@@ -49,8 +43,8 @@ void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tin
       }
       // k3 aux
       for(int ii = 0; ii < vel.size(); ++ii) {
-	vaux[ii] = vel[ii] + 3*k2[ii+3]/10;
-	paux[ii] = pos[ii] + 3*k2[ii]/10;
+	vaux[ii] = vel[ii] + 3*k1[ii+3]/40 + 9*k2[ii+3]/40;
+	paux[ii] = pos[ii] + 3*k1[ii]/10 + 9*k2[ii]/40;
       }
       //k3
       for(int ii = 0; ii < vel.size(); ++ii) {
@@ -59,8 +53,8 @@ void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tin
       }
       // k4 aux
       for(int ii = 0; ii < vel.size(); ++ii) {
-	vaux[ii] = vel[ii] + 4*k3[ii+3]/5;
-	paux[ii] = pos[ii] + 4*k3[ii]/5;
+	vaux[ii] = vel[ii] + 44*k1[ii+3]/45 - 56*k2[ii+3]/15 + 32*k3[ii+3]/9;
+	paux[ii] = pos[ii] + 44*k1[ii]/45 - 56*k2[ii]/15 + 32*k3[ii]/9;
       }
       //k4
       for(int ii = 0; ii < vel.size(); ++ii) {
@@ -69,8 +63,8 @@ void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tin
       }
       // k5 aux
       for(int ii = 0; ii < vel.size(); ++ii) {
-	vaux[ii] = vel[ii] + 8*k4[ii+3]/9;
-	paux[ii] = pos[ii] + 8*k4[ii]/9;
+	vaux[ii] = vel[ii] + 19372*k1[ii+3]/6561 - 25360*k2[ii+3]/2187 + 64448*k3[ii+3]/6561 - 212*k4[ii+3]/729;
+	paux[ii] = pos[ii] + 19372*k1[ii]/6561 - 25360*k2[ii]/2187 + 64448*k3[ii]/6561 - 212*k4[ii]/729;
       }
       //k5
       for(int ii = 0; ii < vel.size(); ++ii) {
@@ -79,8 +73,8 @@ void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tin
       }      
       // k6 aux
       for(int ii = 0; ii < vel.size(); ++ii) {
-	vaux[ii] = vel[ii] + k5[ii+3];
-	paux[ii] = pos[ii] + k5[ii];
+	vaux[ii] = vel[ii] + 9017*k1[ii+3]/3168 - 355*k2[ii+1]/33 - 46732*k3[ii+3]/5247 + 49*k4[ii+3]/176 - 5103*k5[ii+3]/18656;
+	paux[ii] = pos[ii] + 9017*k1[ii]/3168 - 355*k2[ii]/33 - 46732*k3[ii]/5247 + 49*k4[ii]/176 - 5103*k5[ii]/18656;
       }
       //k6
       for(int ii = 0; ii < vel.size(); ++ii) {
@@ -89,46 +83,43 @@ void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tin
       }
       // k7 aux
       for(int ii = 0; ii < vel.size(); ++ii) {
-	vaux[ii] = vel[ii] + k6[ii+3];
-	paux[ii] = pos[ii] + k6[ii];
+	vaux[ii] = vel[ii] + 35*k1[ii+3]/384 + 500*k3[ii+3]/1113 + 125*k4[ii+3]/192 - 2187*k5[ii+3]/6784 + 11*k6[ii+3]/84;
+	paux[ii] = pos[ii] + 35*k1[ii]/384 + 500*k3[ii]/1113 + 125*k4[ii]/192 - 2187*k5[ii]/6784 + 11*k6[ii]/84;
       }
       //k7
       for(int ii = 0; ii < vel.size(); ++ii) {
 	k7[ii+3] = dt*compute(paux, vaux, t + dt, ii+1);
 	k7[ii] = dt*compute(paux, vaux, t + dt, ii+4);
       }
-      // new vel, pos
+      // new vel,pos
       for(int ii = 0; ii < vel.size(); ++ii) {
-	vel[ii] = vel[ii] + (35*k1[ii+3]/384 + 0 + 500*k3[ii+3]/1113 + 125*k4[ii+3]/192 - 2187*k5[ii+3]/6884) + 11*k6[ii+3]/84;
-	pos[ii] = pos[ii] + (35*k1[ii]/384 + 0 + 500*k3[ii]/1113 + 125*k4[ii]/192 - 2187*k5[ii]/6884) + 11*k6[ii]/84;	
+	vel[ii] = vel[ii] + 35*k1[ii+3]/384 + 500*k3[ii+3]/1113 + 125*k4[ii+3]/192 - 2187*k5[ii+3]/6784 + 11*k6[ii+3]/84;
+	pos[ii] = pos[ii] + 35*k1[ii]/384 + 500*k3[ii]/1113 + 125*k4[ii]/192 - 2187*k5[ii]/6784 + 11*k6[ii]/84;
       }
-      // vel,pos aux
-      for(int ii = 0; ii < vel.size(); ++ii) {
-	velaux[ii] = velaux[ii] + (5179*k1[ii+3]/57600 + 0 + 7571*k3[ii+3]/16695 + 393*k4[ii+3]/640 - 92097*k5[ii+3]/339200) + 187*k6[ii+3]/2100 + k7[ii+3]/40;
-      }
-      for(int ii = 0; ii < vel.size(); ++ii) {
-	posaux[ii] = posaux[ii] + (5179*k1[ii]/57600 + 0 + 7571*k3[ii]/16695 + 393*k4[ii]/640 - 92097*k5[ii]/339200) + 187*k6[ii]/2100 + k7[ii]/40;
-      }
-      //new dt
-      dt2=dtnew(E(vel,velaux,pos,posaux),dt);
-      dt=dt2;
       
+      /*      //errores
+      for (int ii = 0; ii < vel.size(); ++ii)
+	{
+	  vaux[ii] = 71*k1[ii+3]/57600 - 71*k3[ii+3]/16695 + 71*k4[ii+3]/1920 - 17253*k5[ii+3]/339200 + 22*k6[ii+3]/525 - k7[ii+3]/40;
+	  paux[ii] = 71*k1[ii]/57600 - 71*k3[ii]/16695 + 71*k4[ii]/1920 - 17253*k5[ii]/339200 + 22*k6[ii]/525 - k7[ii]/40;
+	}
+
+      pzy = norm(paux);
+      vzy = norm(vaux);
+      
+      //new dt
+      dt=dtnew(pzy, vzy, dt);*/
+
+      //print
       std::cout << t  << " ";
       print(pos);
       print(vel);
       std::cout << "\n";
       
-      
-      nt++;
     }
-  std::cout << nt << "\n";
 }  
   
 
-
-
-
-  
 double compute(const std::vector<double> & pos, const std::vector<double> & vel, const double t, const int id)
 {
   double r = rvar(pos,vel);
@@ -153,7 +144,7 @@ double compute(const std::vector<double> & pos, const std::vector<double> & vel,
     return vel[2];
   }
   else{ //advierte de un error
-    std::cerr << "Error!!!!" << id << std::endl;
+    std::cerr << "Error en la funcion compute pelmazo!!!!" << id << std::endl;
     exit(1);
   }
 }
@@ -185,19 +176,36 @@ double svar(const std::vector<double> & pos, const std::vector<double> & vel)
   return std::sqrt((pos[0]+u-1)*(pos[0]+u-1)+(pos[1]*pos[1])+(pos[2]*pos[2]));
 }
 
- double dtnew(double e,double dt)
+double saux(const double x, const double dt)
 {
-  return dt* std::min(5.0,std::max(0.2,(std::pow(0.38,1/5))*(std::pow(1/e,1/5))));
-}
- 
-double E(const std::vector<double> & vel, const std::vector<double> & velaux,const std::vector<double> & pos, const std::vector<double> & posaux)//medida conjunta del error
-{
-  double sum=0;
-  for(int ii=0;ii<vel.size();ii++)
-    {
-      sum+=((vel[ii]-velaux[ii])/((vel[ii]-velaux[ii])+(std::max(std::abs(vel[ii]),std::abs(velaux[ii])))))*((vel[ii]-velaux[ii])/((vel[ii]-velaux[ii])+(std::max(std::abs(vel[ii]),std::abs(velaux[ii]))))) + ((pos[ii]-posaux[ii])/((pos[ii]-posaux[ii])+(std::max(std::abs(pos[ii]),std::abs(posaux[ii])))))*((pos[ii]-posaux[ii])/((pos[ii]-posaux[ii])+(std::max(std::abs(pos[ii]),std::abs(posaux[ii]))))); //Ai con o sin valor absoluto?
-      
-    }
-  return sqrt(sum/3);
+  double aux = eps*dt/(2*std::fabs(x));
+  return std::pow(aux, 1/5); 
 }
 
+double dtnew(const double p, const double v, const double dt)
+{
+  double sprom = (saux(p,dt) + saux(v,dt))/2.0;
+  if(sprom >= 2.0){
+    return 2.0*dt;
+  }
+  if(1.0 <= sprom < 2.0){
+    return dt;
+  }
+  if(sprom < 1.0){
+    return sprom*dt/2.0;
+  }
+  else{
+    std::cerr << "Error en dtnew!!!! tonto humano" << "\n";
+    exit(1);
+  }
+}
+
+double norm(const std::vector<double> & x)
+{
+  double res = 0;
+  for (int i = 0; i < x.size(); ++i)
+  {
+    res += x[i]*x[i];
+  }
+  return std::sqrt(res);
+}
