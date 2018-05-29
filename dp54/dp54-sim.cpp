@@ -19,11 +19,11 @@ void dp54(std::vector<double> & pos, std::vector<double> & vel, const double tin
   k7.resize(6);
   vaux.resize(vel.size());
   paux.resize(vel.size());
-  double dt=T/6000.0;
+  double dt=0.0002;
   int N=int((tend-tini)/dt);
   
   //calculo
-  for (int tt=0;tt<135;tt++)
+  for (int tt=0;tt<110000;tt++)
     {
       double t = tini + dt*tt;
       
@@ -157,7 +157,7 @@ void initial_condition(std::vector<double> & pos, std::vector<double> & vel)
   pos = {0.994, 0.0, 0.0};
   
   //velocidades
-  vel = {0.0, -2.0015851063790825224053786224, 0.0};
+  vel = {0.1, -2.0015851063790825224053786224, 0.1};
 }
 
 void print(const std::vector<double> & v)
@@ -186,8 +186,8 @@ double saux(const double x, const double dt)
 
 double dtnew(const double p, const double v, const double dt)
 {
-  double hmin=0.001;
-  double hmax=0.136;
+  double hmin=0.0000001;
+  double hmax=0.0002;
   double sprom = (saux(p,dt) + saux(v,dt))*0.5;
   if(dt*sprom <= hmin){
     return hmin;
