@@ -1,4 +1,4 @@
-/*#include <vector>
+#include <vector>
 //constantes
 const double u=0.012277471; //proporcion entre las masas
 const double T=17.0652165601579625588917206249; //periodo
@@ -23,8 +23,8 @@ double dtnew(const double p, const double v, const double dt);
 double saux(const double x, const double dt);
 
 double norm(const std::vector<double> & x);
-*/
 
+/*
 #include <vector>
 //constantes
 const double u=0.012277471; //proporcion entre las masas
@@ -48,3 +48,4 @@ double dtnew(double e,double dt);
 
 double E(const std::vector<double> & vel, const std::vector<double> & velaux,const std::vector<double> & pos, const std::vector<double> & posaux);//medida conjunta del error
 
+*/
